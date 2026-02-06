@@ -111,25 +111,6 @@ const RegistrationForm = ({ formRef }: RegistrationFormProps) => {
           description: "حدث خطأ أثناء إرسال البيانات. يرجى المحاولة مرة أخرى.",
         });
       } else {
-        // Send WhatsApp notification
-        try {
-          await supabase.functions.invoke('send-whatsapp-notification', {
-            body: {
-              fullName: data.fullName,
-              email: data.email,
-              phone: fullPhone,
-              institution: data.institution,
-              jobTitle: data.jobTitle,
-              studentCount: data.studentCount,
-              notes: data.notes,
-            },
-          });
-          console.log("WhatsApp notification sent successfully");
-        } catch (notificationError) {
-          console.error("Failed to send WhatsApp notification:", notificationError);
-          // Don't show error to user, form submission was successful
-        }
-
         toast({
           title: "تم التسجيل بنجاح! 🎉",
           description: "سنتواصل معك قريباً",

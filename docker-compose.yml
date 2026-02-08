@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  jadwala-app:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+      - VITE_SUPABASE_PUBLISHABLE_KEY=${VITE_SUPABASE_PUBLISHABLE_KEY}
+    # إذا كنت تريد استخدام ملف .env الموجود لديك:
+    env_file:
+      - .env

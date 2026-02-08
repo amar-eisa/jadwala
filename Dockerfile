@@ -1,32 +1,30 @@
-# المرحلة 1: البناء (Build) باستخدام صورة Bun الرسمية
-FROM oven/bun:1 as build
+# المرحلة 1: البناء (Build)
+FROM node:20-alpine as build
 
-# تحديد مجلد العمل داخل الحاوية
+# تحديد مجلد العمل
 WORKDIR /app
 
-# نسخ ملفات تعريف الحزم (package.json وملف القفل الخاص بـ Bun)
-COPY package.json bun.lockb ./
+# نسخ ملفات تعريف الحزم وتثبيتها
+COPY package.json package-lock.json ./
+RUN npm install
 
-# تثبيت الحزم بدقة بناءً على ملف القفل (بديل npm ci)
-RUN bun install --frozen-lockfile
-
-# نسخ باقي ملفات المشروع بالكامل
+# نسخ باقي ملفات المشروع
 COPY . .
 
-# بناء تطبيق الويب (سينتج مجلد dist)
-RUN bun run build
+# بناء المشروع للإنتاج
+RUN npm run build
 
-# المرحلة 2: التشغيل (Production) باستخدام خادم Nginx
+# المرحلة 2: التشغيل (Serve) باستخدام خادم خفيف مثل Nginx
 FROM nginx:alpine
 
-# نسخ ملفات الموقع الجاهزة من مرحلة البناء إلى مجلد Nginx
+# نسخ ملفات البناء من المرحلة السابقة إلى مجلد Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# نسخ ملف إعدادات Nginx (تأكد من وجود هذا الملف بجانب Dockerfile)
+# نسخ إعدادات Nginx (اختياري، لكن مفيد لتطبيقات React Router)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # فتح المنفذ 80
 EXPOSE 80
 
-# تشغيل الخادم
+# تشغيل Nginx
 CMD ["nginx", "-g", "daemon off;"]

@@ -12,7 +12,7 @@ RUN npm ci
 COPY . .
 
 # بناء المشروع للإنتاج
-RUN npm run build
+RUN npm install
 
 # المرحلة 2: التشغيل (Serve) باستخدام خادم خفيف مثل Nginx
 FROM nginx:alpine

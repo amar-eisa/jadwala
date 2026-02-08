@@ -6,13 +6,13 @@ WORKDIR /app
 
 # نسخ ملفات تعريف الحزم وتثبيتها
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm install
 
 # نسخ باقي ملفات المشروع
 COPY . .
 
 # بناء المشروع للإنتاج
-RUN npm install
+RUN npm run build
 
 # المرحلة 2: التشغيل (Serve) باستخدام خادم خفيف مثل Nginx
 FROM nginx:alpine

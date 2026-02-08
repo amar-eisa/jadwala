@@ -1,5 +1,5 @@
 # المرحلة 1: البناء (Build)
-FROM oven/bun:1 as build
+FROM oven/bun:1 As build
 
 WORKDIR /app
 
